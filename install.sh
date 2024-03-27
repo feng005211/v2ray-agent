@@ -528,19 +528,19 @@ readInstallProtocolType() {
 checkBTPanel() {
     if [[ -n $(pgrep -f "BT-Panel") ]]; then
         # 读取域名
-        if [[ -d '/www/server/panel/vhost/cert/' && -n $(find /www/server/panel/vhost/cert/*/fullchain.pem) ]]; then
+        if [[ -d '/www/server/panel/ssl/' && -n $(find /www/server/panel/ssl/*/fullchain.pem) ]]; then
             if [[ -z "${currentHost}" ]]; then
                 echoContent skyBlue "\n读取宝塔配置\n"
 
-                find /www/server/panel/vhost/cert/*/fullchain.pem | awk -F "[/]" '{print $7}' | awk '{print NR""":"$0}'
+                find /www/server/panel/ssl/*/fullchain.pem | awk -F "[/]" '{print $7}' | awk '{print NR""":"$0}'
 
                 read -r -p "请输入编号选择:" selectBTDomain
             else
-                selectBTDomain=$(find /www/server/panel/vhost/cert/*/fullchain.pem | awk -F "[/]" '{print $7}' | awk '{print NR""":"$0}' | grep "${currentHost}" | cut -d ":" -f 1)
+                selectBTDomain=$(find /www/server/panel/ssl/*/fullchain.pem | awk -F "[/]" '{print $7}' | awk '{print NR""":"$0}' | grep "${currentHost}" | cut -d ":" -f 1)
             fi
 
             if [[ -n "${selectBTDomain}" ]]; then
-                btDomain=$(find /www/server/panel/vhost/cert/*/fullchain.pem | awk -F "[/]" '{print $7}' | awk '{print NR""":"$0}' | grep "${selectBTDomain}:" | cut -d ":" -f 2)
+                btDomain=$(find /www/server/panel/ssl/*/fullchain.pem | awk -F "[/]" '{print $7}' | awk '{print NR""":"$0}' | grep "${selectBTDomain}:" | cut -d ":" -f 2)
 
                 if [[ -z "${btDomain}" ]]; then
                     echoContent red " ---> 选择错误，请重新选择"
@@ -548,8 +548,8 @@ checkBTPanel() {
                 else
                     domain=${btDomain}
                     if [[ ! -f "/etc/v2ray-agent/tls/${btDomain}.crt" && ! -f "/etc/v2ray-agent/tls/${btDomain}.key" ]]; then
-                        ln -s "/www/server/panel/vhost/cert/${btDomain}/fullchain.pem" "/etc/v2ray-agent/tls/${btDomain}.crt"
-                        ln -s "/www/server/panel/vhost/cert/${btDomain}/privkey.pem" "/etc/v2ray-agent/tls/${btDomain}.key"
+                        ln -s "/www/server/panel/ssl/${btDomain}/fullchain.pem" "/etc/v2ray-agent/tls/${btDomain}.crt"
+                        ln -s "/www/server/panel/ssl/${btDomain}/privkey.pem" "/etc/v2ray-agent/tls/${btDomain}.key"
                     fi
 
                     nginxStaticPath="/www/wwwroot/${btDomain}/"
