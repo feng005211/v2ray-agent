@@ -8476,16 +8476,16 @@ installSubscribe() {
 
         nginxVersion=$(nginx -v 2>&1)
 
-        if echo "${nginxVersion}" | grep -q "not found" || [[ -z "${nginxVersion}" ]]; then
-            echoContent yellow "未检测到nginx，无法使用订阅服务\n"
-            read -r -p "是否安装[y/n]？" installNginxStatus
-            if [[ "${installNginxStatus}" == "y" ]]; then
-                installNginxTools
-            else
-                echoContent red " ---> 放弃安装nginx\n"
-                exit 0
-            fi
-        fi
+        # if echo "${nginxVersion}" | grep -q "not found" || [[ -z "${nginxVersion}" ]]; then
+        #     echoContent yellow "未检测到nginx，无法使用订阅服务\n"
+        #     read -r -p "是否安装[y/n]？" installNginxStatus
+        #     if [[ "${installNginxStatus}" == "y" ]]; then
+        #         installNginxTools
+        #     else
+        #         echoContent red " ---> 放弃安装nginx\n"
+        #         exit 0
+        #     fi
+        # fi
         echoContent yellow "开始配置订阅，请输入订阅的端口\n"
 
         mapfile -t result < <(initSingBoxPort "${subscribePort}")
